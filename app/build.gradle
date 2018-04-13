@@ -1,0 +1,45 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 27
+    defaultConfig {
+        applicationId "com.wb.leila.designmodedemo"
+        minSdkVersion 21
+        targetSdkVersion 27
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        debug {
+            //显示日志
+            buildConfigField("boolean", "LOG_DEBUG", "true");
+        }
+        release {
+            //不显示日志
+            buildConfigField("boolean", "LOG_DEBUG", "false");
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'com.android.support:appcompat-v7:27.1.1'
+    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
+    implementation 'com.android.support:recyclerview-v7:27.1.1'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.android.support.test:runner:1.0.1'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+    //1.注解框架
+    implementation 'com.jakewharton:butterknife:8.8.1'
+
+    //辅助插件
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
+    //BaseRecyclerViewAdapter
+    implementation  'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.38'
+    //10.一个基于okhttp的标准RESTful风格的网络框架
+    implementation 'com.lzy.net:okgo:3.0.4'
+}
