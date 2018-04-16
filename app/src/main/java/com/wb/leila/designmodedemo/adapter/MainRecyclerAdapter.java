@@ -15,7 +15,7 @@ import java.util.List;
  * @date 2018/4/13 15:28
  * className  MainRecyclerAdapter
  * email leila329@163.com
- * description
+ * description  基础适配器
  */
 public class MainRecyclerAdapter extends BaseQuickAdapter<BaseBean, BaseViewHolder> {
     public MainRecyclerAdapter(int layoutResId, @Nullable List<BaseBean> data) {

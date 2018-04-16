@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
 import android.widget.Toast;
+
 import com.wb.leila.designmodedemo.manager.ActivityStackManager;
 import com.wb.leila.designmodedemo.utils.LogUtil;
 
@@ -22,9 +23,14 @@ public abstract class BaseActivity extends AppCompatActivity {
     private static final String TAG = BaseActivity.class.getSimpleName();
 
     /**
-     * context
+     * Context
      **/
     protected Context mContext;
+
+    /**
+     * Context全局上下文
+     **/
+    protected Context context;
 
     /**
      * 初始化界面
@@ -53,21 +59,14 @@ public abstract class BaseActivity extends AppCompatActivity {
         ActivityStackManager.getInstance().pushActivity(this);
     }
 
-
     /**
-     * 跳转Activity
-     * skip Another Activity
-     *
-     * @param activity
-     * @param cls
+     * 获取全局上下文
      */
-    public static void skipAnotherActivity(Activity activity,
-                                           Class<? extends Activity> cls) {
-        Intent intent = new Intent(activity, cls);
-        activity.startActivity(intent);
-        activity.finish();
+    private void getContext() {
+        if (context == null) {
+            this.context = BaseApplication.getBaseApplication();
+        }
     }
-
 
     public static Toast toast;
 
@@ -85,6 +84,46 @@ public abstract class BaseActivity extends AppCompatActivity {
         // 最后调用show方法吐丝
         toast.setGravity(Gravity.CENTER, 0, 0);
         toast.show();
+    }
+
+    /**
+     * 页面跳转
+     */
+    public void skipActivity(Class clazz) {
+        skipActivity(clazz, null);
+    }
+
+    /**
+     * 跳转activity 带参数
+     */
+    protected void skipActivity(Class clazz, Bundle bundle) {
+
+        Intent intent = new Intent(context, clazz);
+        if (bundle != null) {
+            intent.putExtras(bundle);
+        }
+        startActivity(intent);
+
+    }
+
+    /**
+     * 跳转activity无参 返回结果
+     */
+    public void skipForResult(Class clazz, int requestCode) {
+        skipForResult(clazz, null, requestCode);
+    }
+
+    /**
+     * 跳转activity带参 返回结果
+     */
+    public void skipForResult(Class clazz, Bundle bundle, int requestCode) {
+
+        Intent intent = new Intent(context, clazz);
+        if (bundle != null) {
+            intent.putExtras(bundle);
+        }
+        startActivityForResult(intent, requestCode);
+
     }
 
     /**

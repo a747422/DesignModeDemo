@@ -35,11 +35,12 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
     //1.注解框架
     implementation 'com.jakewharton:butterknife:8.8.1'
-
     //辅助插件
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
     //BaseRecyclerViewAdapter
     implementation  'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.38'
+    //banner
+    implementation 'com.youth.banner:banner:1.4.10'
     //10.一个基于okhttp的标准RESTful风格的网络框架
     implementation 'com.lzy.net:okgo:3.0.4'
 }

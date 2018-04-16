@@ -1,9 +1,10 @@
-package com.wb.leila.designmodedemo;
+package com.wb.leila.designmodedemo.base;
 
 import android.app.Application;
 import android.content.Context;
 import android.util.Log;
 
+import com.wb.leila.designmodedemo.BuildConfig;
 import com.wb.leila.designmodedemo.utils.LogUtil;
 
 
@@ -11,7 +12,7 @@ import com.wb.leila.designmodedemo.utils.LogUtil;
  * Created by admin on 2018/1/29.
  */
 
-public class MyApplication extends Application {
+public class BaseApplication extends Application {
     private static Context context;
 
 
@@ -27,7 +28,7 @@ public class MyApplication extends Application {
 
     }
 
-    public static Context getContext() {
+    public static Context getBaseApplication() {
         return context;
     }
 

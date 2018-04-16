@@ -10,7 +10,11 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.wb.leila.designmodedemo.adapter.MainRecyclerAdapter;
 import com.wb.leila.designmodedemo.base.BaseActivity;
 import com.wb.leila.designmodedemo.bean.BaseBean;
+import com.wb.leila.designmodedemo.utils.BannerUtil;
+import com.youth.banner.Banner;
+import com.youth.banner.listener.OnBannerListener;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,6 +29,8 @@ public class MainActivity extends BaseActivity {
     Button btnRemove;
     @BindView(R.id.recy)
     RecyclerView recy;
+    @BindView(R.id.banner)
+    Banner banner;
 
     MainRecyclerAdapter mainRecyclerAdapter;
     BaseBean.Builder builder;
@@ -39,6 +45,11 @@ public class MainActivity extends BaseActivity {
         }
     };
 
+    /**
+     * 测试图片地址
+     */
+    List<Integer> listImg = new ArrayList<>();
+    List<String> listTitle = new ArrayList<>();
 
     @Override
     protected void initView() {
@@ -63,15 +74,17 @@ public class MainActivity extends BaseActivity {
         recy.setAdapter(mainRecyclerAdapter);
         //QuickAdapter提供的加载动画，当前为缩放
         mainRecyclerAdapter.openLoadAnimation(BaseQuickAdapter.SCALEIN);
-        //QuickAdapter提供的动画次数，当前为每次都播放
-        //   mainRecyclerAdapter.isFirstOnly(false);
+
 
     }
 
     @Override
     protected void initData() {
-
-
+        listImg.add(R.drawable.iv);
+        listTitle.add("张韶涵");
+        listImg.add(R.drawable.iv);
+        listTitle.add("张韶涵+1");
+        BannerUtil.getInstance().setNum(banner, listImg);
     }
 
     @Override
@@ -101,6 +114,24 @@ public class MainActivity extends BaseActivity {
                 break;
             default:
                 break;
+        }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        //开始轮播
+        if (banner != null) {
+            banner.startAutoPlay();
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        //结束轮播
+        if (banner != null) {
+            banner.stopAutoPlay();
         }
     }
 
