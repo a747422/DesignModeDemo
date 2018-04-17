@@ -43,4 +43,6 @@ dependencies {
     implementation 'com.youth.banner:banner:1.4.10'
     //10.一个基于okhttp的标准RESTful风格的网络框架
     implementation 'com.lzy.net:okgo:3.0.4'
+    //8.gson解析
+    implementation 'com.google.code.gson:gson:2.8.2'
 }

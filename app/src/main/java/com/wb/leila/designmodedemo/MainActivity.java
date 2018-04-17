@@ -7,22 +7,33 @@ import android.view.View;
 import android.widget.Button;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.lzy.okgo.model.Response;
 import com.wb.leila.designmodedemo.adapter.MainRecyclerAdapter;
 import com.wb.leila.designmodedemo.base.BaseActivity;
 import com.wb.leila.designmodedemo.bean.BaseBean;
+import com.wb.leila.designmodedemo.callback.JsonCallback;
+import com.wb.leila.designmodedemo.http.OkGoUtil;
+import com.wb.leila.designmodedemo.model.LzyResponse;
 import com.wb.leila.designmodedemo.utils.BannerUtil;
+import com.wb.leila.designmodedemo.utils.LogUtil;
 import com.youth.banner.Banner;
 import com.youth.banner.listener.OnBannerListener;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static com.wb.leila.designmodedemo.http.HttpUrl.URL_LOGIN;
+
 public class MainActivity extends BaseActivity {
+    @BindView(R.id.btn_login)
+    Button btnLogin;
     @BindView(R.id.btn_add)
     Button btnAdd;
     @BindView(R.id.btn_remove)
@@ -92,9 +103,23 @@ public class MainActivity extends BaseActivity {
 
     }
 
-    @OnClick({R.id.btn_add, R.id.btn_remove})
+    @OnClick({R.id.btn_login, R.id.btn_add, R.id.btn_remove})
     void setOnClick(View view) {
         switch (view.getId()) {
+            case R.id.btn_login:
+                Map<String, String> map = new HashMap<>();
+                map.put("phone", "1355255329");
+                map.put("password", "123123");
+                map.put("type", "0");
+                //调用二次封装的okgo，将成功数据返回，错误数据在JsonCallback中处理
+                OkGoUtil.postRequest(URL_LOGIN, this, map, new JsonCallback<LzyResponse>() {
+                    @Override
+                    public void onSuccess(Response<LzyResponse> response) {
+                        LogUtil.d(response.body());
+                    }
+                });
+                map.clear();
+                break;
             case R.id.btn_add:
                 baseBean = builder.code("增加" + i + "次").build();
                 baseBeanList.add(baseBean);

@@ -144,6 +144,8 @@ public class LogUtil {
                     return Log.e(tag, builder.toString());
                 }
                 break;
+            default:
+                break;
         }
         return 0;
     }
