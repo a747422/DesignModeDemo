@@ -3,7 +3,7 @@ package com.wb.leila.designmodedemo.http;
 import android.util.Log;
 
 import com.lzy.okgo.OkGo;
-import com.wb.leila.designmodedemo.callback.JsonCallback;
+import com.wb.leila.designmodedemo.http.callback.JsonCallback;
 
 import java.util.Map;
 

@@ -12,7 +12,7 @@ public class HttpUrl {
     /**
      * BASE链接
      */
-    public static final String URL_BASE = "http://www.gzjscm.cn";
+    public static final String URL_BASE = "https://www.gzjscm.cn";
     /**
      * 登陆链接
      */

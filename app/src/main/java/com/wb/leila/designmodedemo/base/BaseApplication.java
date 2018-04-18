@@ -38,6 +38,7 @@ public class BaseApplication extends Application {
         } else {
             LogUtil.init(false);
         }
+        context = this;
         initOkGo();
     }
 

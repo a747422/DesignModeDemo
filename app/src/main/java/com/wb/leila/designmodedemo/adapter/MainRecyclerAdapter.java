@@ -24,6 +24,6 @@ public class MainRecyclerAdapter extends BaseQuickAdapter<BaseBean, BaseViewHold
 
     @Override
     protected void convert(BaseViewHolder helper, BaseBean item) {
-        helper.setText(R.id.tv_item, item.code);
+        helper.setText(R.id.tv_title, item.code);
     }
 }

@@ -1,7 +1,7 @@
 package com.wb.leila.designmodedemo.http;
 
 import com.google.gson.Gson;
-import com.wb.leila.designmodedemo.model.LzyResponse;
+import com.wb.leila.designmodedemo.http.model.LzyResponse;
 
 /**
  * @author Leila

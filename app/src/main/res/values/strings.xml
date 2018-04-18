@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">DesignModeDemo</string>
+
+
+    <!-- 测试文字 -->
+    <string name="text_32">闲扶亲祖坡诸凤率锅侦皮究衔莲造痕激陕逆接泰抛喝窗扰腰累没者杨蚁逐</string>
+    <string name="text_16">涂朝愚券巡掉粉眯此月晴截驾厂营具</string>
+    <string name="text_8">齿茧辩消团叉改斜</string>
+    <string name="text_6">屑想械孩疫忆</string>
 </resources>

@@ -1,7 +1,6 @@
 package com.wb.leila.designmodedemo;
 
-import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
@@ -11,15 +10,14 @@ import com.lzy.okgo.model.Response;
 import com.wb.leila.designmodedemo.adapter.MainRecyclerAdapter;
 import com.wb.leila.designmodedemo.base.BaseActivity;
 import com.wb.leila.designmodedemo.bean.BaseBean;
-import com.wb.leila.designmodedemo.callback.JsonCallback;
+import com.wb.leila.designmodedemo.bean.DataBean;
+import com.wb.leila.designmodedemo.http.callback.JsonCallback;
 import com.wb.leila.designmodedemo.http.OkGoUtil;
-import com.wb.leila.designmodedemo.model.LzyResponse;
+import com.wb.leila.designmodedemo.http.model.LzyResponse;
 import com.wb.leila.designmodedemo.utils.BannerUtil;
 import com.wb.leila.designmodedemo.utils.LogUtil;
 import com.youth.banner.Banner;
-import com.youth.banner.listener.OnBannerListener;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -77,7 +75,7 @@ public class MainActivity extends BaseActivity {
             baseBeanList.add(baseBean);
         }
         //布局管理器，垂直布局显示
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this, 2);
         //适配器初始化
         mainRecyclerAdapter = new MainRecyclerAdapter(R.layout.main_item, baseBeanList);
         //RecyclerView 添加管理器和适配器
@@ -108,14 +106,15 @@ public class MainActivity extends BaseActivity {
         switch (view.getId()) {
             case R.id.btn_login:
                 Map<String, String> map = new HashMap<>();
-                map.put("phone", "1355255329");
+                map.put("phone", "13556255329");
                 map.put("password", "123123");
                 map.put("type", "0");
                 //调用二次封装的okgo，将成功数据返回，错误数据在JsonCallback中处理
-                OkGoUtil.postRequest(URL_LOGIN, this, map, new JsonCallback<LzyResponse>() {
+                OkGoUtil.postRequest(URL_LOGIN, this, map, new JsonCallback<LzyResponse<DataBean>>() {
                     @Override
-                    public void onSuccess(Response<LzyResponse> response) {
+                    public void onSuccess(Response<LzyResponse<DataBean>> response) {
                         LogUtil.d(response.body());
+                        skipActivity(RecycleViewAcctivity.class);
                     }
                 });
                 map.clear();

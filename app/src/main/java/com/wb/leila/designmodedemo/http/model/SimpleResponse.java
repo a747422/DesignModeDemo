@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.wb.leila.designmodedemo.model;
+package com.wb.leila.designmodedemo.http.model;
 
 import java.io.Serializable;
 

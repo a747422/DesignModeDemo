@@ -52,11 +52,14 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         LogUtil.i(TAG, "--->onCreate()");
+
         initView();
         initData();
         initCilck();
+        getContext();
         mContext = this;
         ActivityStackManager.getInstance().pushActivity(this);
+
     }
 
     /**

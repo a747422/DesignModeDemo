@@ -13,13 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.wb.leila.designmodedemo.callback;
+package com.wb.leila.designmodedemo.http.callback;
 
 import com.google.gson.stream.JsonReader;
 import com.lzy.okgo.convert.Converter;
 import com.wb.leila.designmodedemo.http.HttpException;
-import com.wb.leila.designmodedemo.model.LzyResponse;
-import com.wb.leila.designmodedemo.model.SimpleResponse;
+import com.wb.leila.designmodedemo.http.model.LzyResponse;
+import com.wb.leila.designmodedemo.http.model.SimpleResponse;
 import com.wb.leila.designmodedemo.utils.Convert;
 
 import org.json.JSONArray;
@@ -81,7 +81,7 @@ public class JsonConvert<T> implements Converter<T> {
                 return parseClass(response, clazz);
             }
         }
-
+        //ParameterizedType 泛型类型
         if (type instanceof ParameterizedType) {
             return parseParameterizedType(response, (ParameterizedType) type);
         } else if (type instanceof Class) {
@@ -107,6 +107,7 @@ public class JsonConvert<T> implements Converter<T> {
             //noinspection unchecked
             return (T) new JSONArray(body.string());
         } else {
+            //将解析的结果返回给callback
             T t = Convert.fromJson(jsonReader, rawType);
             response.close();
             return t;
@@ -130,9 +131,10 @@ public class JsonConvert<T> implements Converter<T> {
         ResponseBody body = response.body();
         if (body == null) return null;
         JsonReader jsonReader = new JsonReader(body.charStream());
-
-        Type rawType = type.getRawType();                     // 泛型的实际类型
-        Type typeArgument = type.getActualTypeArguments()[0]; // 泛型的参数
+        // 泛型的实际类型
+        Type rawType = type.getRawType();
+        // 泛型的参数
+        Type typeArgument = type.getActualTypeArguments()[0];
         if (rawType != LzyResponse.class) {
             // 泛型格式如下： new JsonCallback<外层BaseBean<内层JavaBean>>(this)
             T t = Convert.fromJson(jsonReader, type);
@@ -157,7 +159,7 @@ public class JsonConvert<T> implements Converter<T> {
                 //JsonCallback中重写onError进行异常处理
                 //需要注意onError回调中response.code()是网络请求的code
                 //不是我们数据中的code
-                if (code == 100) {
+                if (code == 0) {
                     //noinspection unchecked
                     return (T) lzyResponse;
                 } else {

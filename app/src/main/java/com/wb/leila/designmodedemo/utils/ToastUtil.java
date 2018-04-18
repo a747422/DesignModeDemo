@@ -31,6 +31,7 @@ public class ToastUtil {
      * @param text
      */
     public void showToast(String text) {
+        getContext();
         if (toast == null) {
             // 如果Toast对象为空了，那么需要创建一个新的Toast对象
             toast = Toast.makeText(context, text, Toast.LENGTH_SHORT);
