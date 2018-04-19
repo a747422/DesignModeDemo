@@ -39,7 +39,7 @@ public class RecyclerSectionAdapter extends BaseSectionQuickAdapter<Section, Bas
 
     @Override
     protected void convertHead(BaseViewHolder helper, Section item) {
-        helper.setText(R.id.tv_more, item.t.getUsername());
+        helper.setText(R.id.tv_more, item.header);
     }
 
 

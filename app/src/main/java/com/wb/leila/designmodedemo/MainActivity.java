@@ -1,9 +1,12 @@
 package com.wb.leila.designmodedemo;
 
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.lzy.okgo.model.Response;
@@ -14,8 +17,10 @@ import com.wb.leila.designmodedemo.bean.DataBean;
 import com.wb.leila.designmodedemo.http.callback.JsonCallback;
 import com.wb.leila.designmodedemo.http.OkGoUtil;
 import com.wb.leila.designmodedemo.http.model.LzyResponse;
+import com.wb.leila.designmodedemo.model.RecycleViewUtils;
 import com.wb.leila.designmodedemo.utils.BannerUtil;
 import com.wb.leila.designmodedemo.utils.LogUtil;
+import com.wb.leila.designmodedemo.utils.ToastUtil;
 import com.youth.banner.Banner;
 
 import java.util.ArrayList;
@@ -42,15 +47,17 @@ public class MainActivity extends BaseActivity {
     Banner banner;
 
     MainRecyclerAdapter mainRecyclerAdapter;
+    RecyclerView.LayoutManager layoutManager;
     BaseBean.Builder builder;
-    BaseBean baseBean;
-    List<BaseBean> baseBeanList;
+    DataBean dataBean;
+    List<DataBean> dataBeanList;
+    List<DataBean> dataBeans;
     int i = 0;
-    Observable<BaseBean> observable = new Observable<BaseBean>();
-    Observer<BaseBean> observer = new Observer<BaseBean>() {
+    Observable<DataBean> observable = new Observable<DataBean>();
+    Observer<DataBean> observer = new Observer<DataBean>() {
         @Override
-        public void onUpdate(Observable<BaseBean> observable, List<BaseBean> data) {
-            mainRecyclerAdapter.notifyDataSetChanged();
+        public void onUpdate(Observable<DataBean> observable, List<DataBean> data) {
+            //mainRecyclerAdapter.notifyDataSetChanged();
         }
     };
 
@@ -59,6 +66,8 @@ public class MainActivity extends BaseActivity {
      */
     List<Integer> listImg = new ArrayList<>();
     List<String> listTitle = new ArrayList<>();
+    int mCurrentCounter;
+    boolean isErr = true;
 
     @Override
     protected void initView() {
@@ -68,23 +77,22 @@ public class MainActivity extends BaseActivity {
         observable.register(observer);
 
         builder = new BaseBean.Builder();
-        baseBean = builder.build();
-        baseBeanList = new ArrayList<>();
-        for (int i = 0; i < 5; i++) {
-            baseBean = builder.code("默认次数" + i).build();
-            baseBeanList.add(baseBean);
-        }
+        dataBean = new DataBean();
+        dataBeanList = new ArrayList<>();
+        dataBeans = new ArrayList<>();
+//        for (int i = 0; i < 5; i++) {
+//            dataBean.setMsg("aaaa" + i);
+//            dataBeanList.add(dataBean);
+//        }
         //布局管理器，垂直布局显示
-        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this, 2);
+        layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         //适配器初始化
-        mainRecyclerAdapter = new MainRecyclerAdapter(R.layout.main_item, baseBeanList);
+        mainRecyclerAdapter = new MainRecyclerAdapter(R.layout.main_item, dataBeanList);
         //RecyclerView 添加管理器和适配器
         recy.setLayoutManager(layoutManager);
         recy.setAdapter(mainRecyclerAdapter);
         //QuickAdapter提供的加载动画，当前为缩放
         mainRecyclerAdapter.openLoadAnimation(BaseQuickAdapter.SCALEIN);
-
-
     }
 
     @Override
@@ -98,6 +106,72 @@ public class MainActivity extends BaseActivity {
 
     @Override
     protected void initCilck() {
+        // 没有数据的时候默认显示该布局,布局有数据都不会显示到空布局
+        mainRecyclerAdapter.setEmptyView(R.layout.main_null, (ViewGroup) recy.getParent());
+        mainRecyclerAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+
+                ToastUtil.showToast(String.valueOf(position));
+            }
+        });
+//        recy.addOnScrollListener(new RecyclerView.OnScrollListener() {
+//            @Override
+//            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+//                super.onScrollStateChanged(recyclerView, newState);
+//                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+//                    LinearLayoutManager linearLayoutManager = (LinearLayoutManager) layoutManager;
+//                    //获取最后一个可见view的位置
+//                    int lastVisiblePosition = linearLayoutManager.findLastVisibleItemPosition();
+//                    if (lastVisiblePosition >= layoutManager.getItemCount() - 1) {
+
+        mainRecyclerAdapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
+            @Override
+            public void onLoadMoreRequested() {
+                recy.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        //mCurrentCounter 应该动态设置，判断的20应该根据服务器返回的条数进行调整。
+                        if (mCurrentCounter >= 20) {
+
+                            //数据全部加载完毕
+                            mainRecyclerAdapter.loadMoreEnd();
+
+                        } else {
+                            if (isErr) {
+                                dataBeans.clear();
+                                //成功获取更多数据
+                                for (int i = 0; i < 5; i++) {
+                                    dataBean.setMsg("aaaa" + i);
+                                    dataBeans.add(dataBean);
+                                }
+                                //不能引用初始化时使用的list，会出现无法加载数据。
+                                mainRecyclerAdapter.addData(dataBeans);
+                                mCurrentCounter = mainRecyclerAdapter.getData().size();
+                                //完成
+                                mainRecyclerAdapter.loadMoreComplete();
+                            } else {
+                                //获取更多数据失败
+                                isErr = true;
+                                ToastUtil.showToast("获取数据失败");
+                                //加载失败
+                                mainRecyclerAdapter.loadMoreFail();
+                            }
+                        }
+                    }
+                }, 2000);
+
+
+            }
+        }, recy);
+
+
+//                    }
+//                }
+//
+//            }
+//        });
+
 
     }
 
@@ -120,21 +194,21 @@ public class MainActivity extends BaseActivity {
                 map.clear();
                 break;
             case R.id.btn_add:
-                baseBean = builder.code("增加" + i + "次").build();
-                baseBeanList.add(baseBean);
-                observable.notifyObservers(baseBeanList);
-                i++;
+//                baseBean = builder.code("增加" + i + "次").build();
+//                baseBeanList.add(baseBean);
+//                observable.notifyObservers(baseBeanList);
+//                i++;
                 break;
             case R.id.btn_remove:
-                if (baseBeanList == null) {
-                    // 没有数据的时候默认显示该布局
-                    mainRecyclerAdapter.setEmptyView(R.layout.main_null);
-                    throw new NullPointerException("baseBeanList无数据" + baseBeanList.size());
-                }
-                if (baseBeanList.size() > 0) {
-                    baseBeanList.remove(0);
-                    observable.notifyObservers(baseBeanList);
-                }
+//                if (baseBeanList == null) {
+//                    // 没有数据的时候默认显示该布局
+//                    mainRecyclerAdapter.setEmptyView(R.layout.main_null);
+//                    throw new NullPointerException("baseBeanList无数据" + baseBeanList.size());
+//                }
+//                if (baseBeanList.size() > 0) {
+//                    baseBeanList.remove(0);
+//                    observable.notifyObservers(baseBeanList);
+//                }
                 break;
             default:
                 break;

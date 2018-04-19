@@ -15,22 +15,24 @@ import com.wb.leila.designmodedemo.base.BaseApplication;
  * description
  */
 public class ToastUtil {
-    private Context context;
+    private static Context context;
     public static Toast toast;
 
     /**
      * 获取全局上下文
      */
-    private void getContext() {
+    private static void getContext() {
         if (context == null) {
-            this.context = BaseApplication.getBaseApplication();
+            context = BaseApplication.getBaseApplication();
+            LogUtil.d("创建ToastUtil的context");
         }
+        LogUtil.d("ToastUtil的context已被创建");
     }
 
     /**
      * @param text
      */
-    public void showToast(String text) {
+    public static void showToast(String text) {
         getContext();
         if (toast == null) {
             // 如果Toast对象为空了，那么需要创建一个新的Toast对象
