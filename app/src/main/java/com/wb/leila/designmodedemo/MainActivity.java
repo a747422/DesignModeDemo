@@ -1,15 +1,17 @@
 package com.wb.leila.designmodedemo;
 
-import android.support.v7.widget.GridLayoutManager;
+import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.lzy.okgo.model.Response;
+import com.qmuiteam.qmui.widget.QMUIEmptyView;
 import com.wb.leila.designmodedemo.adapter.MainRecyclerAdapter;
 import com.wb.leila.designmodedemo.base.BaseActivity;
 import com.wb.leila.designmodedemo.bean.BaseBean;
@@ -35,6 +37,8 @@ import butterknife.OnClick;
 import static com.wb.leila.designmodedemo.http.HttpUrl.URL_LOGIN;
 
 public class MainActivity extends BaseActivity {
+    @BindView(R.id.ll_main)
+    LinearLayout linearLayout;
     @BindView(R.id.btn_login)
     Button btnLogin;
     @BindView(R.id.btn_add)
@@ -45,6 +49,7 @@ public class MainActivity extends BaseActivity {
     RecyclerView recy;
     @BindView(R.id.banner)
     Banner banner;
+
 
     MainRecyclerAdapter mainRecyclerAdapter;
     RecyclerView.LayoutManager layoutManager;
@@ -75,15 +80,14 @@ public class MainActivity extends BaseActivity {
         ButterKnife.bind(this);
         //观察者订阅
         observable.register(observer);
-
         builder = new BaseBean.Builder();
         dataBean = new DataBean();
         dataBeanList = new ArrayList<>();
         dataBeans = new ArrayList<>();
-//        for (int i = 0; i < 5; i++) {
-//            dataBean.setMsg("aaaa" + i);
-//            dataBeanList.add(dataBean);
-//        }
+        for (int i = 0; i < 5; i++) {
+            dataBean.setMsg("aaaa" + i);
+            dataBeanList.add(dataBean);
+        }
         //布局管理器，垂直布局显示
         layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         //适配器初始化
@@ -93,7 +97,23 @@ public class MainActivity extends BaseActivity {
         recy.setAdapter(mainRecyclerAdapter);
         //QuickAdapter提供的加载动画，当前为缩放
         mainRecyclerAdapter.openLoadAnimation(BaseQuickAdapter.SCALEIN);
+        initEmpty(linearLayout, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LogUtil.d("点击重试");
+                refreshInit();
+                new Handler().postDelayed(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        //do something
+                        goneEmpty();
+                    }
+                }, 2000);
+            }
+        });
     }
+
 
     @Override
     protected void initData() {
@@ -107,7 +127,7 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void initCilck() {
         // 没有数据的时候默认显示该布局,布局有数据都不会显示到空布局
-        mainRecyclerAdapter.setEmptyView(R.layout.main_null, (ViewGroup) recy.getParent());
+        //   mainRecyclerAdapter.setEmptyView(R.layout.main_null, (ViewGroup) recy.getParent());
         mainRecyclerAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {

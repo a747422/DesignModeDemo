@@ -7,4 +7,20 @@
     <string name="text_16">涂朝愚券巡掉粉眯此月晴截驾厂营具</string>
     <string name="text_8">齿茧辩消团叉改斜</string>
     <string name="text_6">屑想械孩疫忆</string>
+
+
+    <!-- EmptyViewFragment 空界面展示界面 -->
+    <string name="emptyView_mode_title_loading">显示Loading</string>
+    <string name="emptyView_mode_title_single_text">显示一行提示语</string>
+    <string name="emptyView_mode_title_double_text">显示两行提示语</string>
+    <string name="emptyView_mode_title_single_text_and_button">显示一行文字和按钮</string>
+    <string name="emptyView_mode_title_double_text_and_button">显示两行文字和按钮</string>
+
+    <string name="emptyView_mode_desc_single">这是一行提示语</string>
+    <string name="emptyView_mode_desc_double">我是一个EmptyView</string>
+    <string name="emptyView_mode_desc_detail_double">通过右上角的菜单来切换我的不同状态</string>
+    <string name="emptyView_mode_desc_fail_title">加载失败</string>
+    <string name="emptyView_mode_desc_fail_desc">请检测网络是否能正常连接</string>
+    <string name="emptyView_mode_desc_retry">点击重试</string>
+
 </resources>
